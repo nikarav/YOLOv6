@@ -94,12 +94,15 @@ class Detector(DetectBackend):
                  img_size=640,
                  conf_thres=0.25,
                  iou_thres=0.45,
-                 max_det=1000):
+                 max_det=1000,
+                 stride=32,
+    ):
         super().__init__(ckpt_path, device)
         self.class_names = class_names
         self.model.float()
         self.device = device
-        self.img_size = check_img_size(img_size)
+        self.stride = stride
+        self.img_size = check_img_size(img_size, self.stride)
         self.conf_thres = conf_thres
         self.iou_thres = iou_thres
         self.max_det = max_det
@@ -119,7 +122,7 @@ class Detector(DetectBackend):
         return prediction
 
     def predict(self, img_path):
-        img, img_src = process_image(img_path, self.img_size, 32)
+        img, img_src = process_image(img_path, self.img_size, self.stride)
         img = img.to(self.device)
         if len(img.shape) == 3:
             img = img[None]
@@ -144,7 +147,7 @@ class Detector(DetectBackend):
 
 
 def create_model(model_name, class_names=CLASS_NAMES, device=DEVICE,
-                 img_size=640, conf_thres=0.25, iou_thres=0.45, max_det=1000):
+                 img_size=640, conf_thres=0.25, iou_thres=0.45, max_det=1000, stride=32):
     if not os.path.exists(str(PATH_YOLOv6/'weights')):
         os.mkdir(str(PATH_YOLOv6/'weights'))
     if not os.path.exists(str(PATH_YOLOv6/'weights') + f'/{model_name}.pt'):
@@ -153,7 +156,7 @@ def create_model(model_name, class_names=CLASS_NAMES, device=DEVICE,
             str(PATH_YOLOv6/'weights'))
     return Detector(str(PATH_YOLOv6/'weights') + f'/{model_name}.pt',
                     class_names, device, img_size=img_size, conf_thres=conf_thres,
-                    iou_thres=iou_thres, max_det=max_det)
+                    iou_thres=iou_thres, max_det=max_det, stride=stride)
 
 
 def yolov6n(class_names=CLASS_NAMES, device=DEVICE, img_size=640, conf_thres=0.25, iou_thres=0.45, max_det=1000):
@@ -179,3 +182,19 @@ def yolov6l(class_names=CLASS_NAMES, device=DEVICE, img_size=640, conf_thres=0.2
 def custom(ckpt_path, class_names, device=DEVICE, img_size=640, conf_thres=0.25, iou_thres=0.45, max_det=1000):
     return Detector(ckpt_path, class_names, device, img_size=img_size, conf_thres=conf_thres,
                     iou_thres=iou_thres, max_det=max_det)
+
+def yolov6n6(class_names=CLASS_NAMES, device=DEVICE, img_size=1280, conf_thres=0.25, iou_thres=0.45, max_det=1000, stride=64):
+    return create_model("yolov6n6", class_names, device, img_size=img_size, conf_thres=conf_thres,
+                        iou_thres=iou_thres, max_det=max_det, stride=stride)
+
+def yolov6s6(class_names=CLASS_NAMES, device=DEVICE, img_size=1280, conf_thres=0.25, iou_thres=0.45, max_det=1000, stride=64):
+    return create_model("yolov6s6", class_names, device, img_size=img_size, conf_thres=conf_thres,
+                        iou_thres=iou_thres, max_det=max_det, stride=stride)
+
+def yolov6m6(class_names=CLASS_NAMES, device=DEVICE, img_size=1280, conf_thres=0.25, iou_thres=0.45, max_det=1000, stride=64):
+    return create_model("yolov6m6", class_names, device, img_size=img_size, conf_thres=conf_thres,
+                        iou_thres=iou_thres, max_det=max_det, stride=stride)
+
+def yolov6l6(class_names=CLASS_NAMES, device=DEVICE, img_size=1280, conf_thres=0.25, iou_thres=0.45, max_det=1000, stride=64):
+    return create_model("yolov6l6", class_names, device, img_size=img_size, conf_thres=conf_thres,
+                        iou_thres=iou_thres, max_det=max_det, stride=stride)
