@@ -28,6 +28,7 @@ def load_checkpoint(weights, map_location=None, inplace=True, fuse=True):
         LOGGER.info("\nFusing model...")
         model = fuse_model(model).eval()
     else:
+        LOGGER.info("\nNot Fusing model...")
         model = model.eval()
     return model
 
