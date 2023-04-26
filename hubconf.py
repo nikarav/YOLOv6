@@ -98,7 +98,7 @@ class Detector(DetectBackend):
                  stride=32,
                  fuse=False,
     ):
-        super().__init__(weights=ckpt_path, device=device, fuse=fuse)
+        super().__init__(ckpt_path, device, True, fuse)
         self.class_names = class_names
         self.model.float()
         self.device = device
