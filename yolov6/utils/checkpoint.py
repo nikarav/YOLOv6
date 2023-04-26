@@ -19,7 +19,7 @@ def load_state_dict(weights, model, map_location=None):
     return model
 
 
-def load_checkpoint(weights, map_location=None, inplace=True, fuse=True):
+def load_checkpoint(weights, map_location=None, inplace=True, fuse=False):
     """Load model from checkpoint file."""
     LOGGER.info("Loading checkpoint from {}".format(weights))
     ckpt = torch.load(weights, map_location=map_location)  # load
