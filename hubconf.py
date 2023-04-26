@@ -91,12 +91,12 @@ class Detector(DetectBackend):
                  ckpt_path,
                  class_names,
                  device,
+                 fuse,
                  img_size=640,
                  conf_thres=0.25,
                  iou_thres=0.45,
                  max_det=1000,
                  stride=32,
-                 fuse=False,
     ):
         super().__init__(ckpt_path, device, True, fuse)
         self.class_names = class_names
